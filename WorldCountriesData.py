@@ -1,6 +1,12 @@
 from datetime import timedelta, date
 import numpy as np
 
+countries = ['Czechia', 'China-Hubei', 'Italy', 'Spain', 'UK', 'US']
+#countries = ['Czechia', 'Spain', 'California', 'Ecuador']
+# Fill the data on one-day-basis
+start_date = date(2020, 1, 22)
+end_date = date.today()
+
 def daterange(start_date, end_date):
   for n in range(int ((end_date - start_date).days)):
     yield start_date + timedelta(n)
@@ -78,23 +84,25 @@ WorldCountries.update({'Germany' : countryData(['Germany'], 82.79e6)})
 WorldCountries.update({'UK' : countryData(['UK', 'United Kingdom'], 66.44e6)})
 WorldCountries.update({'Russia' : countryData(['Russia'], 144.5e6)})
 
-countries = ['Czechia', 'China-Hubei', 'Italy', 'Spain', 'France', 'US']
-#countries = ['Czechia', 'Spain', 'California', 'Ecuador']
-# Fill the data on one-day-basis
-start_date = date(2020, 1, 22)
-end_date = date.today()
+# Fill the data on one-day-basis.
 for country in countries:
   for single_date in daterange(start_date, end_date):
     WorldCountries[country].AddDayFromCSV(single_date.isoformat())
 
 # PLOT DATA
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.dates import (WEEKLY, DateFormatter,
                               rrulewrapper, RRuleLocator)
 
+font = {'family' : 'Sans',
+        #'weight' : 'bold',
+        'size'   : 15}
+matplotlib.rc('font', **font)
+
 fig, ax = plt.subplots()
 plt.title('Dead patients (per 1 million people)')
-rule = rrulewrapper(WEEKLY)#, interval=5)
+rule = rrulewrapper(WEEKLY, interval=2)
 loc = RRuleLocator(rule)
 ax.xaxis.set_major_locator(loc)
 formatter = DateFormatter('%m/%d/%y')
@@ -108,7 +116,7 @@ plt.savefig('dead.png')
 
 fig, ax = plt.subplots()
 plt.title('Confirmed patients (per 1 million people)')
-rule = rrulewrapper(WEEKLY)#, interval=5)
+rule = rrulewrapper(WEEKLY, interval=2)
 loc = RRuleLocator(rule)
 ax.xaxis.set_major_locator(loc)
 formatter = DateFormatter('%m/%d/%y')
