@@ -1,7 +1,9 @@
 from datetime import timedelta, date
 import numpy as np
 
-countries = ['Czechia', 'China-Hubei', 'Italy', 'Spain', 'UK', 'US']
+# python3 WorldCountriesData.py
+
+countries = ['Czechia', 'Spain', 'US', 'China-Hubei', 'Italy']
 #countries = ['Czechia', 'Spain', 'California', 'Ecuador']
 # Fill the data on one-day-basis
 start_date = date(2020, 1, 22)
