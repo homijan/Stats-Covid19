@@ -15,8 +15,10 @@ def GetCSVData(csvfile_name, countryname, iname, iinfect, idead):
   for line in lines: 
     words = line.split(',')
     if countryname==words[iname]:
-      Ninfected += int(words[iinfect])
-      Ndead += int(words[idead])
+      if words[iinfect]!='':
+        Ninfected += int(words[iinfect])
+      if words[idead]!='':
+        Ndead += int(words[idead])
   ifile.close()
   return Ninfected, Ndead
 
@@ -63,6 +65,7 @@ class countryData:
 WorldCountries = {}
 # Add country name/s and population.
 WorldCountries.update({'Czechia' : countryData(['Czech Republic', 'Czechia'], 10.65e6)})
+WorldCountries.update({'Ecuador' : countryData(['Ecuador'], 16.62e6)})
 # The population corresonds to Hubei province containing 95% of dead in China.
 WorldCountries.update({'China-Hubei' : countryData(['China', 'Mainland China'], 58.5e6)}) 
 WorldCountries.update({'South Korea' : countryData(['South Korea','"Korea'], 51.47e6)})
@@ -76,15 +79,12 @@ WorldCountries.update({'UK' : countryData(['UK', 'United Kingdom'], 66.44e6)})
 WorldCountries.update({'Russia' : countryData(['Russia'], 144.5e6)})
 
 countries = ['Czechia', 'China-Hubei', 'Italy', 'Spain', 'France', 'US']
-#countries = ['Czechia', 'Spain', 'California']
+#countries = ['Czechia', 'Spain', 'California', 'Ecuador']
 # Fill the data on one-day-basis
-#start_date = date(2020, 3, 12)
-#end_date = date(2020, 3, 23)
-start_date = date(2020, 2, 1)
-end_date = date.today()#date(2020, 3, 22)
+start_date = date(2020, 1, 22)
+end_date = date.today()
 for country in countries:
   for single_date in daterange(start_date, end_date):
-    #print(single_date.isoformat()) 
     WorldCountries[country].AddDayFromCSV(single_date.isoformat())
 
 # PLOT DATA
@@ -104,9 +104,10 @@ for country in countries:
   dates, infected, dead = WorldCountries[country].GetDatesInfectedDead()
   plt.plot_date(dates, np.array(dead) / float(WorldCountries[country].population) * 1e6, label=country)
 plt.legend()
+plt.savefig('dead.png')
 
 fig, ax = plt.subplots()
-plt.title('Infected patients (per 1 million people)')
+plt.title('Confirmed patients (per 1 million people)')
 rule = rrulewrapper(WEEKLY)#, interval=5)
 loc = RRuleLocator(rule)
 ax.xaxis.set_major_locator(loc)
@@ -117,5 +118,6 @@ for country in countries:
   dates, infected, dead = WorldCountries[country].GetDatesInfectedDead()
   plt.plot_date(dates, np.array(infected) / float(WorldCountries[country].population) * 1e6, label=country)
 plt.legend()
+plt.savefig('confirmed.png')
 
 plt.show()

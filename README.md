@@ -6,4 +6,7 @@ Notice that we show a normalized data with respect to population or country or r
 It should help to better understand and predict the phase of spread, while compared to other
 countries. Unfortunately, it seems that European countries will suffer from a higher death-rate compared to China.
 
-
+<table border="0">
+<td> <img src="dead.png">
+<td> <img src="confirmed.png">
+</table>
